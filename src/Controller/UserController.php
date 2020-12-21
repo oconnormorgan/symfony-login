@@ -78,4 +78,39 @@ class UserController extends AbstractController
             'message' => 'Token is not valid!'
         ], 400);
     }
+
+    /**
+     * @Route("/logout/{token}", name="user_logout", methods={"DELETE"})
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function logout(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if (!$request->attributes->get('token')) {
+            return $this->json([
+                'message' => 'no token'
+            ], 401);
+        }
+
+        $token = $request->attributes->get('token');
+
+        $users = $this->getDoctrine()->getRepository(UserEntity::class)->findAll();
+
+        foreach ($users as $user) {
+            if ($user->getToken() === $token) {
+                $user->setToken(null);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->json([
+                    'message' => 'You are logout!',
+                ], 200);
+            }
+        }
+
+        return $this->json([
+            'message' => 'Token is not valid!'
+        ], 400);
+    }
 }

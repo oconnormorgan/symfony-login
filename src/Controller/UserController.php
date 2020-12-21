@@ -48,4 +48,34 @@ class UserController extends AbstractController
             'message' => 'They have an error on your email or your password!'
         ], 404);
     }
+
+    /**
+     * @Route("/user/{token}", name="user_me", methods={"GET"})
+     * @param Request $request
+     */
+    public function me(Request $request): Response
+    {
+        if (!$request->attributes->get('token')) {
+            return $this->json([
+                'message' => 'no token'
+            ], 401);
+        }
+
+        $token = $request->attributes->get('token');
+
+        $users = $this->getDoctrine()->getRepository(UserEntity::class)->findAll();
+
+        foreach ($users as $user) {
+            if ($user->getToken() === $token) {
+                return $this->json([
+                    'Firstname' => $user->getFirstname(),
+                    'Lastname' => $user->getLastname()
+                ], 200);
+            }
+        }
+
+        return $this->json([
+            'message' => 'Token is not valid!'
+        ], 400);
+    }
 }

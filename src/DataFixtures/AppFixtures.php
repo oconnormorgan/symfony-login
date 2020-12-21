@@ -13,6 +13,8 @@ class AppFixtures extends Fixture
          $user = new UserEntity();
          $user->setEmail('admin@symfonylogin.fr');
          $user->setPassword('password');
+         $user->setFirstname('admin');
+         $user->setLastname('ADMIN');
          $manager->persist($user);
 
         $manager->flush();

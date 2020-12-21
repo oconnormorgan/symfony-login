@@ -1,4 +1,4 @@
-#symfony-login
+# Symfony-login
 
 ## Run server
 

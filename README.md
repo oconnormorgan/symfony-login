@@ -1,5 +1,7 @@
 # Symfony-login
 
+Project carried out for a potential work-study contract
+
 ## Run server
 
 `composer install`
